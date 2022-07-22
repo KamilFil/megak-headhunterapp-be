@@ -1,5 +1,5 @@
 import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import { expectedContractType, expectedTypeWork, isHired } from "types";
+import { expectedContractType, expectedTypeWork, hireStatus } from "types";
 
 @Entity()
 export class StudentUser extends BaseEntity {
@@ -99,8 +99,8 @@ export class StudentUser extends BaseEntity {
     isActive: boolean;
 
     @Column("enum", {
-        enum: isHired,
-        default: isHired.Available
+        enum: hireStatus,
+        default: hireStatus.Available
     })
-    hireStatus: isHired;
+    hireStatus: hireStatus;
 }

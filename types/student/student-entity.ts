@@ -35,7 +35,7 @@ export enum expectedContractType {
   Irrelevant = 'Brak Preferencji',
 }
 
-export enum isHired {
+export enum hireStatus {
   Available = 'Dostępny',
   Interviewed = 'W trakcie rozmowy',
   Hired = 'Zatrudniony'
@@ -45,3 +45,5 @@ export enum isHired {
 export type GetStudentUserResponse = StudentEntity;
 
 export type UpdateStudentUserResponse = StudentEntity;
+
+export type UpdateHireStatusResponse = StudentEntity | {message: string};
