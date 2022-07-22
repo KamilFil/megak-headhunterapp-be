@@ -1,6 +1,7 @@
-import {Controller, Get, Inject, Param} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Param, Patch} from '@nestjs/common';
 import {StudentService} from "./student.service";
-import {GetStudentUserResponse} from "../../types";
+import {GetStudentUserResponse, UpdateStudentUserResponse} from "../../types";
+import {StudentUser} from "./student-user.entity";
 
 @Controller('student')
 export class StudentController {
@@ -10,9 +11,17 @@ export class StudentController {
     }
 
     @Get('/:id')
-    async getStudentUser(
+    getStudentUser(
         @Param('id') id: string
     ): Promise<GetStudentUserResponse> {
         return this.studentService.getStudentUser(id);
+    }
+
+    @Patch('/:id')
+    updateStudentUser(
+        @Param('id') id: string,
+        @Body() updatedStudent: StudentUser
+    ): Promise<UpdateStudentUserResponse> {
+        return this.studentService.updateStudentUser(id, updatedStudent);
     }
 }

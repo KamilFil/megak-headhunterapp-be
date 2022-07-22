@@ -43,3 +43,5 @@ export enum isHired {
 }
 
 export type GetStudentUserResponse = StudentEntity;
+
+export type UpdateStudentUserResponse = StudentEntity;
