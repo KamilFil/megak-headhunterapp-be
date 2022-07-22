@@ -7,7 +7,7 @@ export const dbConfig = {
   username: 'root',
   password: '',
   database: 'megak_headhunterapp',
-  entities: ['./dist/**/**.entity{.ts,.js'],
+  entities: ['./dist/**/**.entity{.ts,.js}'],
   bigNumberStrings: false,
   logging: true,
   synchronize: true,

@@ -1,110 +1,94 @@
 import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
-import {expectedContractType, expectedTypeWork, isHired} from "../../../types";
+import { expectedContractType, expectedTypeWork, isHired } from "types";
 
 @Entity()
 export class StudentUser extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
-    @Column({
-        type: "varchar",
+    @Column("varchar", {
         length: 100,
         unique: true,
     })
     email: string;
 
-    @Column({
-        type: "varchar",
-        length: 16
+    @Column('varchar', {
+        length: 16,
+        nullable: true
     })
     tel: string | null;
 
-    @Column({
-        type: 'varchar',
+    @Column("varchar", {
         length: 16
     })
     firstName: string;
 
-    @Column({
-        type: 'varchar',
+    @Column("varchar", {
         length: 28
     })
     lastName: string
 
-    @Column({
-        type: 'varchar',
+    @Column("varchar", {
         unique: true
     })
     githubUsername: string;
 
-    @Column({
-        array: true,
+    @Column('simple-array', {
         nullable: true
     })
     portfolioUrls: string[] | null;
 
-    @Column({
-        array: true
-    })
+    @Column('simple-array')
     projectUrls: string[] = [];
 
-    @Column()
+    @Column('text')
     bio: string
 
-    @Column({
-        type: "enum",
+    @Column('enum', {
         enum: expectedTypeWork,
-        default: expectedTypeWork.DoesntMatter,
+        default: expectedTypeWork.Irrelevant,
     })
     expectedTypeWork: expectedTypeWork;
 
-    @Column({
-        type: "varchar",
+    @Column('varchar', {
         length: 58
     })
     targetWorkCity: string;
 
-    @Column({
-        type: "enum",
+    @Column('enum', {
         enum: expectedContractType,
-        default: expectedContractType.NoPreferences
+        default: expectedContractType.Irrelevant
     })
     expectedContractType: expectedContractType;
 
-    @Column({
-        default: 'float',
+    @Column("float", {
         precision: 7,
         scale: 2,
         nullable: true
     })
     expectedSalary: number | null;
 
-    @Column({
-        type: "boolean",
+    @Column("boolean", {
         default: false
     })
     canTakeApprenticeship: boolean;
 
-    @Column({
-        type: "int",
+    @Column('int', {
         default: 0
     })
     monthsOfCommercialExp: number;
 
-    @Column({
-        type: 'text',
+    @Column("text", {
         nullable: true
     })
     education: string | null;
 
-    @Column({
-        type: 'text',
+    @Column("text", {
         nullable: true
     })
     workExperience: string | null;
 
-    @Column({
-        type: 'text',
+    @Column("text", {
         nullable: true
     })
     courses: string | null;
@@ -114,10 +98,9 @@ export class StudentUser extends BaseEntity {
     })
     isActive: boolean;
 
-    @Column({
-        type: "enum",
+    @Column("enum", {
         enum: isHired,
         default: isHired.Available
     })
-    isHired: isHired;
+    hireStatus: isHired;
 }

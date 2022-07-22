@@ -1,22 +1,23 @@
 export interface StudentEntity {
   email: string;
-  tel: string;
+  tel: string | null;
   firstName: string;
   lastName: string;
   githubUsername: string;
-  portfolioUrls: string;
-  projectUrls: string;
+  portfolioUrls: string[];
+  projectUrls: string[];
   bio: string;
   expectedTypeWork: string;
   targetWorkCity: string;
   expectedContractType: string;
-  expectedSalary: number;
-  canTakeApprenticeship: string;
+  expectedSalary: number | null;
+  canTakeApprenticeship: boolean;
   monthsOfCommercialExp: number;
-  education: string;
-  workExperience: string;
-  courses: string;
-  active: boolean;
+  education: string | null;
+  workExperience: string | null;
+  courses: string | null;
+  isActive: boolean;
+  hireStatus: string
 }
 
 export enum expectedTypeWork {
@@ -24,14 +25,14 @@ export enum expectedTypeWork {
   ReadyToMove = 'Gotowość do przeprowadzki',
   Remote = 'Wyłącznie zdalnie',
   Hybrid = 'Hybrydowo',
-  DoesntMatter = 'Bez znaczenia'
+  Irrelevant = 'Bez znaczenia'
 }
 
 export enum expectedContractType {
   UoP = 'Tylko UoP',
   B2B = 'Możliwe B2B',
   UZ = 'Możliwe UZ/UoD',
-  NoPreferences = 'Brak Preferencji',
+  Irrelevant = 'Brak Preferencji',
 }
 
 export enum isHired {
@@ -40,3 +41,5 @@ export enum isHired {
   Hired = 'Zatrudniony'
 
 }
+
+export type GetStudentUserResponse = StudentEntity;
