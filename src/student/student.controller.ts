@@ -21,7 +21,7 @@ export class StudentController {
     updateStudentUser(
         @Param('id') id: string,
         @Body() updatedStudent: StudentUser
-    ): Promise<UpdateStudentUserResponse> {
+    ): Promise<UpdateStudentUserResponse | Error> {
         return this.studentService.updateStudentUser(id, updatedStudent);
     }
 
