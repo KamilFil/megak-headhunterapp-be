@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Inject, Param, Patch, ValidationError} from '@nestjs/common';
+import {Body, Controller, Get, Inject, Param, Patch} from '@nestjs/common';
 import {StudentService} from "./student.service";
 import {GetStudentUserResponse, UpdateHireStatusResponse, UpdateStudentUserResponse} from "../../types";
 import {StudentUser} from "./student-user.entity";
@@ -21,7 +21,7 @@ export class StudentController {
     updateStudentUser(
         @Param('id') id: string,
         @Body() updatedStudent: StudentUser
-    ): Promise<UpdateStudentUserResponse | ValidationError> {
+    ): Promise<UpdateStudentUserResponse> {
         return this.studentService.updateStudentUser(id, updatedStudent);
     }
 

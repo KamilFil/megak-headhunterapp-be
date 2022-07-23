@@ -12,11 +12,13 @@ export class StudentService {
     }
 
     async updateStudentUser(id: string, updatedStudent: StudentUser) {
+
         /* email Validation */
 
         const users = await StudentUser.find()
 
-        const emails = users.filter(user => user.id !== updatedStudent.id)
+        const emails = users
+            .filter(user => user.id !== updatedStudent.id)
             .map(user => user.email);
 
         if (!updatedStudent.email.includes('@')) {
@@ -39,15 +41,16 @@ export class StudentService {
             throw new ValidationError('lastName cannot be empty.')
         }
 
-        /* portfolioUrls Validation */
+        /* projectUrls Validation */
 
-        if(!updatedStudent.portfolioUrls.length) {
-            throw new ValidationError('portfolioUrls cannot be empty.')
+        if(!updatedStudent.projectUrls.length) {
+            throw new ValidationError('projectUrls cannot be empty.')
         }
 
         /* gitHubUsername Validation */
 
-        const gitHubUsernames = users.filter(user => user.id !== updatedStudent.id)
+        const gitHubUsernames = users
+            .filter(user => user.id !== updatedStudent.id)
             .map(user => user.githubUsername);
 
         const gitHubUser = await axios.get(`https://api.github.com/users/${updatedStudent.githubUsername}`)
@@ -73,7 +76,7 @@ export class StudentService {
         const user = await StudentUser.findOneOrFail({where: {id}})
 
         if(user.hireStatus !== hireStatus.Interviewed) {
-            return {message: 'Cannot change hire status.'}
+            throw new ValidationError('Cannot change hire status.')
         }
 
         user.hireStatus = hireStatus.Hired
