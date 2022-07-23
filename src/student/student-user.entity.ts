@@ -1,6 +1,5 @@
 import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
 import { expectedContractType, expectedTypeWork, hireStatus } from "types";
-import {IsEmail, IsNotEmpty} from "class-validator";
 
 @Entity()
 export class StudentUser extends BaseEntity {
@@ -11,7 +10,6 @@ export class StudentUser extends BaseEntity {
         length: 100,
         unique: true,
     })
-    @IsEmail()
     email: string;
 
     @Column('varchar', {
@@ -23,19 +21,16 @@ export class StudentUser extends BaseEntity {
     @Column("varchar", {
         length: 16
     })
-    @IsNotEmpty()
     firstName: string;
 
     @Column("varchar", {
         length: 28
     })
-    @IsNotEmpty()
     lastName: string
 
     @Column("varchar", {
         unique: true
     })
-    @IsNotEmpty()
     githubUsername: string;
 
     @Column('simple-array', {
