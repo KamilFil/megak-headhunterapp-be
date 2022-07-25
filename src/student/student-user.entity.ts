@@ -1,5 +1,6 @@
-import {BaseEntity, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import { expectedContractType, expectedTypeWork, hireStatus } from "types";
+import {HrUser} from "../hr-user/hr-user.entity";
 
 @Entity()
 export class StudentUser extends BaseEntity {
@@ -103,4 +104,8 @@ export class StudentUser extends BaseEntity {
         default: hireStatus.Available
     })
     hireStatus: hireStatus;
+
+    @ManyToOne(type => HrUser, entity => entity.studentsToCall)
+    @JoinColumn()
+    hr: HrUser
 }
