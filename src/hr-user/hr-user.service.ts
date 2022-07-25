@@ -1,4 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
+import { StudentService } from 'src/student/student.service';
+import {HrUser} from "./hr-user.entity";
+import {StudentUser} from "../student/student-user.entity";
 
 @Injectable()
-export class HrUserService {}
+export class HrUserService {
+    constructor(
+        @Inject(StudentService) private studentService: StudentService
+    ) {
+    }
+
+    async getStudentsToCall(id) {
+        return await StudentUser.find({where: {hr: id}})
+    }
+}
