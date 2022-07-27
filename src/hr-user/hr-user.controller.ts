@@ -62,9 +62,9 @@ export class HrUserController {
     }
 
     @Get('/:studentId')
-    getStudentId(
+    getStudentCv(
         @Param('studentId') studentId: string
     ): Promise<StudentUser> {
-        return this.hrUserService.getStudentId(studentId)
+        return this.hrUserService.getStudentCv(studentId)
     }
 }
