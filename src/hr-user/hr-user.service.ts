@@ -78,4 +78,8 @@ export class HrUserService {
                 monthsOfCommercialExp: query.monthsOfCommercialExp,
             }})
     }
+
+    setUserStatusToHired(studentId: string) {
+        return this.studentService.updateHireStatus(studentId);
+    }
 }
