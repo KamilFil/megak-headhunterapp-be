@@ -1,6 +1,5 @@
 import {Inject, Injectable} from '@nestjs/common';
 import { StudentService } from 'src/student/student.service';
-import {HrUser} from "./hr-user.entity";
 import {StudentUser} from "../student/student-user.entity";
 
 @Injectable()
@@ -12,5 +11,9 @@ export class HrUserService {
 
     async getStudentsToCall(id) {
         return await StudentUser.find({where: {hr: id}})
+    }
+
+    async getStudentCv(studentId: string) {
+        return await this.studentService.getStudentUser(studentId);
     }
 }
