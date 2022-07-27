@@ -16,4 +16,8 @@ export class HrUserService {
     async getStudentCv(studentId: string) {
         return await this.studentService.getStudentUser(studentId);
     }
+
+    setUserStatusToHired(studentId: string) {
+        return this.studentService.updateHireStatus(studentId);
+    }
 }

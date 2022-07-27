@@ -28,6 +28,6 @@ export class HrUserController {
     setUserStatusToHired(
         @Param('studentId') studentId: string
     ): Promise<UpdateHireStatusResponse> {
-        return this.setUserStatusToHired(studentId);
+        return this.hrUserService.setUserStatusToHired(studentId);
     }
 }
