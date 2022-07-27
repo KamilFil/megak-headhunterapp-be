@@ -60,4 +60,11 @@ export class HrUserController {
     ): Promise<UpdateHireStatusResponse> {
         return this.hrUserService.setUserStatusToAvailable(hrId, studentId);
     }
+
+    @Get('/:studentId')
+    getStudentId(
+        @Param('studentId') studentId: string
+    ): Promise<StudentUser> {
+        return this.hrUserService.getStudentId(studentId)
+    }
 }
