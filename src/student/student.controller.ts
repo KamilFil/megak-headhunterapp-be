@@ -29,6 +29,6 @@ export class StudentController {
     updateHireStatus(
         @Param('id') id: string,
     ): Promise<UpdateHireStatusResponse>{
-        return this.studentService.updateHireStatus(id);
+        return this.studentService.setStudentStatusToHired(id);
     }
 }

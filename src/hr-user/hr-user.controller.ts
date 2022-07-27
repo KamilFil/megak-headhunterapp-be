@@ -1,7 +1,7 @@
 import {Controller, Get, Inject, Param, Patch} from '@nestjs/common';
 import {HrUserService} from "./hr-user.service";
 import {StudentUser} from "../student/student-user.entity";
-import {UpdateHireStatusResponse} from "../../types";
+import {GetStudentUserResponse, UpdateHireStatusResponse} from "../../types";
 
 @Controller('hr-user')
 export class HrUserController {
@@ -20,14 +20,21 @@ export class HrUserController {
     @Get('/:studentId')
     getStudentCv(
         @Param('studentId') studentId: string
-    ): Promise<StudentUser> {
+    ): Promise<GetStudentUserResponse> {
         return this.hrUserService.getStudentCv(studentId)
     }
 
-    @Patch('/hired/:id')
+    @Patch('/hired/:studentId')
     setUserStatusToHired(
         @Param('studentId') studentId: string
     ): Promise<UpdateHireStatusResponse> {
         return this.hrUserService.setUserStatusToHired(studentId);
+    }
+
+    @Patch('/notInterested/:studentId')
+    setUserStatusToAvailable(
+        @Param('studentId') studentId: string
+    ): Promise<UpdateHireStatusResponse> {
+        return this.hrUserService.setUserStatusToAvailable(studentId);
     }
 }

@@ -18,6 +18,10 @@ export class HrUserService {
     }
 
     setUserStatusToHired(studentId: string) {
-        return this.studentService.updateHireStatus(studentId);
+        return this.studentService.setStudentStatusToHired(studentId);
+    }
+
+    setUserStatusToAvailable(studentId: string) {
+        return this.studentService.setStudentStatusToAvailable(studentId);
     }
 }
