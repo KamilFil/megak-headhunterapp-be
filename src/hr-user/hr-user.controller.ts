@@ -15,4 +15,11 @@ export class HrUserController {
     ): Promise<StudentUser[]> {
         return this.hrUserService.getStudentsToCall(id);
     }
+
+    @Get('/:studentId')
+    getStudentId(
+        @Param('studentId') studentId: string
+    ): Promise<StudentUser> {
+        return this.hrUserService.getStudentId(studentId)
+    }
 }
