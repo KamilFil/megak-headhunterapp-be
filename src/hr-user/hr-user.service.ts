@@ -40,4 +40,8 @@ export class HrUserService {
 
         return await this.studentService.setStudentStatusToAvailable(studentId);
     }
+
+    setUserStatusToInterviewed(hrId: string, studentId: string) {
+        return Promise.resolve(undefined);
+    }
 }
