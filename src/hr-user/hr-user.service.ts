@@ -86,4 +86,8 @@ export class HrUserService {
     setUserStatusToAvailable(studentId: string) {
         return this.studentService.setStudentStatusToAvailable(studentId);
     }
+
+    setUserStatusToInterviewed(hrId: string, studentId: string) {
+        return Promise.resolve(undefined);
+    }
 }
