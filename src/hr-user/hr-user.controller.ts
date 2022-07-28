@@ -10,14 +10,14 @@ export class HrUserController {
     ) {
     }
 
-    @Get('/:id')
+    @Get('/call-list/:hrId')
     getAllStudentsToCall(
-        @Param('id') id: string
+        @Param('hrId') hrId: string
     ): Promise<StudentUser[]> {
-        return this.hrUserService.getStudentsToCall(id);
+        return this.hrUserService.getStudentsToCall(hrId);
     }
 
-    @Get('/:studentId')
+    @Get('/student-cv/:studentId')
     getStudentCv(
         @Param('studentId') studentId: string
     ): Promise<GetStudentUserResponse> {
@@ -31,7 +31,7 @@ export class HrUserController {
         return this.hrUserService.setUserStatusToHired(studentId);
     }
 
-    @Patch('/notInterested/:studentId')
+    @Patch('/not-interested/:studentId')
     setUserStatusToAvailable(
         @Param('studentId') studentId: string
     ): Promise<UpdateHireStatusResponse> {

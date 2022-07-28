@@ -10,7 +10,9 @@ export class HrUserService {
     }
 
     async getStudentsToCall(id) {
-        return await StudentUser.find({where: {hr: id}})
+        return await StudentUser.find({
+            where: {hr: {id}},
+        })
     }
 
     async getStudentCv(studentId: string) {
