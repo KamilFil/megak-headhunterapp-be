@@ -2,6 +2,7 @@ import {Inject, Injectable} from '@nestjs/common';
 import {StudentService} from 'src/student/student.service';
 import {StudentUser} from "../student/student-user.entity";
 import {hireStatus} from "../../types";
+import {ValidationError} from "../utils/errors";
 
 @Injectable()
 export class HrUserService {
@@ -24,7 +25,7 @@ export class HrUserService {
         const student = await StudentUser.findOne({where: {id: studentId}})
 
         if (hrId !== student.hr.id || student.hireStatus !== hireStatus.Interviewed) {
-            return {message: 'Cannot change hireStatus'}
+            throw new ValidationError('Cannot change hire status.')
         }
 
         return await this.studentService.setStudentStatusToHired(studentId);
@@ -34,7 +35,7 @@ export class HrUserService {
         const student = await StudentUser.findOne({where: {id: studentId}})
 
         if (hrId !== student.hr.id || student.hireStatus !== hireStatus.Interviewed) {
-            return {message: 'Cannot change hireStatus'}
+            throw new ValidationError('Cannot change hire status.')
         }
 
         return await this.studentService.setStudentStatusToAvailable(studentId);
