@@ -24,11 +24,12 @@ export class HrUserController {
         return this.hrUserService.getStudentCv(studentId)
     }
 
-    @Patch('/hired/:studentId')
+    @Patch('/hired/:hrId/:studentId')
     setUserStatusToHired(
+        @Param('hrId') hrId: string,
         @Param('studentId') studentId: string
     ): Promise<UpdateHireStatusResponse> {
-        return this.hrUserService.setUserStatusToHired(studentId);
+        return this.hrUserService.setUserStatusToHired(hrId, studentId);
     }
 
     @Patch('/not-interested/:studentId')

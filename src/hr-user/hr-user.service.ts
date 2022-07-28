@@ -1,6 +1,7 @@
 import {Inject, Injectable} from '@nestjs/common';
-import { StudentService } from 'src/student/student.service';
+import {StudentService} from 'src/student/student.service';
 import {StudentUser} from "../student/student-user.entity";
+import {hireStatus} from "../../types";
 
 @Injectable()
 export class HrUserService {
@@ -19,11 +20,17 @@ export class HrUserService {
         return await this.studentService.getStudentUser(studentId);
     }
 
-    setUserStatusToHired(studentId: string) {
-        return this.studentService.setStudentStatusToHired(studentId);
+    async setUserStatusToHired(hrId: string, studentId: string) {
+        const student = await StudentUser.findOne({where: {id: studentId}})
+
+        if (hrId !== student.hr.id || student.hireStatus !== hireStatus.Interviewed) {
+            return {message: 'Cannot change hireStatus'}
+        }
+
+        return await this.studentService.setStudentStatusToHired(studentId);
     }
 
-    setUserStatusToAvailable(studentId: string) {
-        return this.studentService.setStudentStatusToAvailable(studentId);
+    async setUserStatusToAvailable(studentId: string) {
+        return await this.studentService.setStudentStatusToAvailable(studentId);
     }
 }
