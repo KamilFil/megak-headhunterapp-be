@@ -105,7 +105,7 @@ export class StudentUser extends BaseEntity {
     })
     hireStatus: hireStatus;
 
-    @ManyToOne(type => HrUser, entity => entity.studentsToCall, {eager: true})
+    @ManyToOne(type => HrUser, entity => entity.studentsToCall, {eager: true, nullable: true})
     @JoinColumn()
-    hr: HrUser
+    hr: HrUser | null
 }

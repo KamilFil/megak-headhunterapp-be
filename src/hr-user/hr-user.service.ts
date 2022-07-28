@@ -3,6 +3,7 @@ import {StudentService} from 'src/student/student.service';
 import {StudentUser} from "../student/student-user.entity";
 import {hireStatus} from "../../types";
 import {ValidationError} from "../utils/errors";
+import {HrUser} from "./hr-user.entity";
 
 @Injectable()
 export class HrUserService {
@@ -37,11 +38,27 @@ export class HrUserService {
         if (hrId !== student.hr.id || student.hireStatus !== hireStatus.Interviewed) {
             throw new ValidationError('Cannot change hire status.')
         }
+        student.hr = null
+        student.hireStatus = hireStatus.Available;
 
-        return await this.studentService.setStudentStatusToAvailable(studentId);
+        await StudentUser.update(studentId, student);
+
+        return student;
     }
 
-    setUserStatusToInterviewed(hrId: string, studentId: string) {
-        return Promise.resolve(undefined);
+    async setUserStatusToInterviewed(hrId: string, studentId: string) {
+        const student = await StudentUser.findOne({where: {id: studentId}})
+        const hr = await HrUser.findOne({where: {id: hrId}})
+
+        if (student.hireStatus !== hireStatus.Available) {
+            throw new ValidationError('Cannot change hire status.')
+        }
+
+        student.hr = hr
+        student.hireStatus = hireStatus.Interviewed
+
+        await StudentUser.update(studentId, student)
+
+        return student;
     }
 }
