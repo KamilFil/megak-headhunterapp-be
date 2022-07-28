@@ -30,7 +30,13 @@ export class HrUserService {
         return await this.studentService.setStudentStatusToHired(studentId);
     }
 
-    async setUserStatusToAvailable(studentId: string) {
+    async setUserStatusToAvailable(hrId: string, studentId: string) {
+        const student = await StudentUser.findOne({where: {id: studentId}})
+
+        if (hrId !== student.hr.id || student.hireStatus !== hireStatus.Interviewed) {
+            return {message: 'Cannot change hireStatus'}
+        }
+
         return await this.studentService.setStudentStatusToAvailable(studentId);
     }
 }

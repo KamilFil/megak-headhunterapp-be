@@ -32,10 +32,11 @@ export class HrUserController {
         return this.hrUserService.setUserStatusToHired(hrId, studentId);
     }
 
-    @Patch('/not-interested/:studentId')
+    @Patch('/not-interested/:hrId/:studentId')
     setUserStatusToAvailable(
+        @Param('hrId') hrId: string,
         @Param('studentId') studentId: string
     ): Promise<UpdateHireStatusResponse> {
-        return this.hrUserService.setUserStatusToAvailable(studentId);
+        return this.hrUserService.setUserStatusToAvailable(hrId, studentId);
     }
 }
