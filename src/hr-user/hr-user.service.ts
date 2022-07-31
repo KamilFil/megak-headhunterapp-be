@@ -22,8 +22,11 @@ export class HrUserService {
         })
     }
 
-    async getStudentCv(studentId: string) {
-        return await this.studentService.getStudentUser(studentId);
+    async getStudentCv(hrId: string, studentId: string) {
+        return await StudentUser.findOne({where: {
+                id: studentId,
+                hr: {id: hrId}
+            }});
     }
 
     async setUserStatusToHired(hrId: string, studentId: string) {

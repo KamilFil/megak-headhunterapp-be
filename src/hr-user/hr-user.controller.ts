@@ -37,11 +37,12 @@ export class HrUserController {
         return this.hrUserService.setUserStatusToInterviewed(hrId, studentId)
     }
 
-    @Get('/student-cv/:studentId')
+    @Get('/student-cv/:hrId/:studentId')
     getStudentCv(
-        @Param('studentId') studentId: string
+        @Param('studentId') studentId: string,
+        @Param('hrId') hrId: string
     ): Promise<GetStudentUserResponse> {
-        return this.hrUserService.getStudentCv(studentId)
+        return this.hrUserService.getStudentCv(hrId, studentId)
     }
 
     @Patch('/hired/:hrId/:studentId')
