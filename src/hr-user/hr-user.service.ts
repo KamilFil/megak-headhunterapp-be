@@ -4,6 +4,7 @@ import {StudentUser} from "../student/student-user.entity";
 import {hireStatus} from "../../types";
 import {ValidationError} from "../utils/errors";
 import {HrUser} from "./hr-user.entity";
+import {query} from "express";
 
 @Injectable()
 export class HrUserService {
@@ -60,5 +61,15 @@ export class HrUserService {
         await StudentUser.update(studentId, student)
 
         return student;
+    }
+
+    async filterAllStudents(query) {
+        return await StudentUser.find({where: {
+                expectedTypeWork: query.expectedTypeWork,
+                expectedContractType: query.expectedContractType,
+                expectedSalary: query.expectedSalary,
+                canTakeApprenticeship: query.canTakeApprenticeship,
+                monthsOfCommercialExp: query.monthsOfCommercialExp,
+            }})
     }
 }

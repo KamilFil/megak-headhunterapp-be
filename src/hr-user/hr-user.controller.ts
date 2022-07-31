@@ -1,7 +1,7 @@
-import {Controller, Get, Inject, Param, Patch} from '@nestjs/common';
+import {Controller, Get, Inject, Param, Patch, Post, Query} from '@nestjs/common';
 import {HrUserService} from "./hr-user.service";
 import {StudentUser} from "../student/student-user.entity";
-import {GetStudentUserResponse, UpdateHireStatusResponse} from "../../types";
+import {GetStudentUserResponse, StudentEntity, UpdateHireStatusResponse} from "../../types";
 
 @Controller('hr-user')
 export class HrUserController {
@@ -15,6 +15,13 @@ export class HrUserController {
         @Param('hrId') hrId: string
     ): Promise<StudentUser[]> {
         return this.hrUserService.getStudentsToCall(hrId);
+    }
+
+    @Get('/call-list')
+    filterAllStudents(
+        @Query() query: StudentEntity
+    ) {
+        return this.hrUserService.filterAllStudents(query);
     }
 
     @Patch('/call/:hrId/:studentId')
