@@ -4,13 +4,16 @@ import {StudentUser} from "../student/student-user.entity";
 import {hireStatus} from "../../types";
 import {ValidationError} from "../utils/errors";
 import {HrUser} from "./hr-user.entity";
-import {query} from "express";
 
 @Injectable()
 export class HrUserService {
     constructor(
         @Inject(StudentService) private studentService: StudentService
     ) {
+    }
+
+    async getAllStudents() {
+        return await StudentUser.find()
     }
 
     async getStudentsToCall(id) {

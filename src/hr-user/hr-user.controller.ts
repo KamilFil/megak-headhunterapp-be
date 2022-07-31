@@ -1,4 +1,4 @@
-import {Controller, Get, Inject, Param, Patch, Post, Query} from '@nestjs/common';
+import {Controller, Get, Inject, Param, Patch, Query} from '@nestjs/common';
 import {HrUserService} from "./hr-user.service";
 import {StudentUser} from "../student/student-user.entity";
 import {GetStudentUserResponse, StudentEntity, UpdateHireStatusResponse} from "../../types";
@@ -8,6 +8,11 @@ export class HrUserController {
     constructor(
         @Inject(HrUserService) private hrUserService: HrUserService
     ) {
+    }
+
+    @Get('/call-list')
+    getAllStudents(): Promise<StudentUser[]> {
+        return this.hrUserService.getAllStudents();
     }
 
     @Get('/call-list/:hrId')
