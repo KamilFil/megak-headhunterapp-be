@@ -6,11 +6,13 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConfig } from './config/db.config';
 import { StudentModule } from './student/student.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dbConfig),
     StudentModule,
+    AdminModule,
     // HrModule,
   ],
   controllers: [AppController /* HrController */],
