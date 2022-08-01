@@ -22,7 +22,7 @@ export class HrUserController {
         return this.hrUserService.getStudentsToCall(hrId);
     }
 
-    @Get('/call-list')
+    @Get('/call-list/filter')
     filterAllStudents(
         @Query() query: StudentEntity
     ) {
