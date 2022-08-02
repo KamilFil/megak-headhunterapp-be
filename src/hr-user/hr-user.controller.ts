@@ -61,10 +61,4 @@ export class HrUserController {
         return this.hrUserService.setUserStatusToAvailable(hrId, studentId);
     }
 
-    @Get('/:studentId')
-    getStudentCv(
-        @Param('studentId') studentId: string
-    ): Promise<StudentUser> {
-        return this.hrUserService.getStudentCv(studentId)
-    }
 }

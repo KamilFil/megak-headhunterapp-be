@@ -79,15 +79,4 @@ export class HrUserService {
             }})
     }
 
-    setUserStatusToHired(studentId: string) {
-        return this.studentService.setStudentStatusToHired(studentId);
-    }
-
-    setUserStatusToAvailable(studentId: string) {
-        return this.studentService.setStudentStatusToAvailable(studentId);
-    }
-
-    setUserStatusToInterviewed(hrId: string, studentId: string) {
-        return Promise.resolve(undefined);
-    }
 }
