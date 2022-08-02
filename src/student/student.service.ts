@@ -72,14 +72,20 @@ export class StudentService {
         return await StudentUser.findOneOrFail({where: {id}})
     }
 
-    async updateHireStatus(id: string) {
+    async setStudentStatusToHired(id: string) {
         const user = await StudentUser.findOneOrFail({where: {id}})
 
-        if(user.hireStatus !== hireStatus.Interviewed) {
-            throw new ValidationError('Cannot change hire status.')
-        }
-
         user.hireStatus = hireStatus.Hired
+
+        await StudentUser.update(id, user);
+
+        return user;
+    }
+
+    async setStudentStatusToAvailable(id: string) {
+        const user = await StudentUser.findOneOrFail({where: {id}})
+
+        user.hireStatus = hireStatus.Available
 
         await StudentUser.update(id, user);
 

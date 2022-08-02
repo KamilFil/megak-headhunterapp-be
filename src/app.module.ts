@@ -6,16 +6,19 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConfig } from './config/db.config';
 import { StudentModule } from './student/student.module';
-import { AdminModule } from './admin/admin.module';
+import { HrUserModule } from './hr-user/hr-user.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dbConfig),
     StudentModule,
-    AdminModule,
+    HrUserModule,
     // HrModule,
   ],
   controllers: [AppController /* HrController */],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+  }
+}
