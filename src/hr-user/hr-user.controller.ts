@@ -10,7 +10,7 @@ export class HrUserController {
     ) {
     }
 
-    @Get('/call-list')
+    @Get('/')
     getAllStudents(): Promise<StudentUser[]> {
         return this.hrUserService.getAllStudents();
     }
