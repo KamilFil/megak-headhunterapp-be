@@ -1,7 +1,8 @@
 export interface StudentEntity {
   id?: string;
   email: string;
-  // role: role.User;
+  pwdHash: string;
+  currentTokenId: string | null;
   tel: string | null;
   firstName: string;
   lastName: string;
