@@ -1,7 +1,7 @@
 export interface StudentEntity {
   id?: string;
   email: string;
-  role: role.User;
+  // role: role.User;
   tel: string | null;
   firstName: string;
   lastName: string;
@@ -20,12 +20,6 @@ export interface StudentEntity {
   courses: string | null;
   isActive: boolean;
   hireStatus: string;
-}
-
-export enum role {
-  Admin = 0,
-  Hr = 1,
-  User = 2,
 }
 
 export enum expectedTypeWork {
