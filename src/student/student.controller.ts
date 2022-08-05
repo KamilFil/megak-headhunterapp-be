@@ -15,13 +15,17 @@ import {
 } from '../../types';
 import { StudentUser } from './student-user.entity';
 import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from 'types/auth/role.enum';
+import { RolesGuard } from 'src/guards/roles.guard';
 
 @Controller('student')
 export class StudentController {
   constructor(@Inject(StudentService) private studentService: StudentService) {}
 
   @Get('/:id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.Admin)
   getStudentUser(@Param('id') id: string): Promise<GetStudentUserResponse> {
     return this.studentService.getStudentUser(id);
   }

@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { StudentUser } from '../student/student-user.entity';
 import { StudentEntity } from '../../types';
+import { Role } from 'types/auth/role.enum';
 
 @Entity()
 export class HrUser extends BaseEntity {
@@ -27,6 +28,9 @@ export class HrUser extends BaseEntity {
     default: null,
   })
   currentTokenId: string | null;
+
+  @Column()
+  roles: Role.Hr;
 
   @Column({
     nullable: false,

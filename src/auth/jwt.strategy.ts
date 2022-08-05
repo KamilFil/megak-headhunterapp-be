@@ -2,6 +2,7 @@ import { Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { StudentUser } from '../student/student-user.entity';
+import { AuthLoginRes } from './dto/auth-login.dto';
 
 export interface JwtPayload {
   id: string;
@@ -21,6 +22,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
+  filter(user: StudentUser): AuthLoginRes {
+    const { id, email, roles } = user;
+    return { id, email, roles };
+  }
+
   async validate(payload: JwtPayload, done: (error, user) => void) {
     if (!payload || !payload.id) {
       return done(new UnauthorizedException(), false);
@@ -31,6 +37,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       return done(new UnauthorizedException(), false);
     }
 
-    done(null, user);
+    done(null, this.filter(user));
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
-import { AuthLoginDto } from './dto/auth-login.dto';
+import { AuthLoginDto, AuthLoginRes } from './dto/auth-login.dto';
 import { StudentUser } from '../student/student-user.entity';
 import { hashPwd } from '../utils/hash-pwd';
 import { v4 as uuid } from 'uuid';

@@ -6,6 +6,7 @@ import { dbConfig } from './config/db.config';
 import { StudentModule } from './student/student.module';
 import { HrUserModule } from './hr-user/hr-user.module';
 import { AuthModule } from './auth/auth.module';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -13,10 +14,9 @@ import { AuthModule } from './auth/auth.module';
     StudentModule,
     HrUserModule,
     AuthModule,
-    // HrModule,
   ],
   controllers: [AppController /* HrController */],
-  providers: [AppService],
+  providers: [AppService, RolesGuard],
 })
 export class AppModule {
   constructor() {}
