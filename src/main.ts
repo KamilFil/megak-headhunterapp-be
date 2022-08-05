@@ -9,6 +9,7 @@ async function bootstrap() {
     credentials: true,
   });
   app.use(handleError);
+
   await app.listen(3001);
 }
 bootstrap();
