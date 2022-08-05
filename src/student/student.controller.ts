@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Inject, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { StudentService } from './student.service';
 import {
   GetStudentUserResponse,
@@ -6,12 +14,14 @@ import {
   UpdateStudentUserResponse,
 } from '../../types';
 import { StudentUser } from './student-user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('student')
 export class StudentController {
   constructor(@Inject(StudentService) private studentService: StudentService) {}
 
   @Get('/:id')
+  @UseGuards(AuthGuard('jwt'))
   getStudentUser(@Param('id') id: string): Promise<GetStudentUserResponse> {
     return this.studentService.getStudentUser(id);
   }

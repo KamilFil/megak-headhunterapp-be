@@ -19,6 +19,15 @@ export class HrUser extends BaseEntity {
   })
   email: string;
 
+  @Column()
+  pwdHash: string;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  currentTokenId: string | null;
+
   @Column({
     nullable: false,
     length: 100,
