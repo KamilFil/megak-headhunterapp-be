@@ -4,6 +4,8 @@ import { MulterDiskUploadedFiles } from '../interfaces/files';
 import * as fs from 'fs';
 import * as path from 'path';
 import { storageDir } from '../utils/storage';
+import { StudentUser } from '../student/student-user.entity';
+import { v4 as uuid } from 'uuid';
 
 @Injectable()
 export class AdminService {
@@ -32,6 +34,17 @@ export class AdminService {
         HttpStatus.BAD_REQUEST,
       );
     }
+
+    if (query.email.indexOf('@') === -1) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Email incorrect',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (
       query.fullName === null ||
       query.fullName === '' ||
@@ -59,8 +72,17 @@ export class AdminService {
       );
     }
 
+    if (query.maxReservedStudents < 1 || query.maxReservedStudents > 999) {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'You can only reserve 1-999 students',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     const hr = new HrUser();
-    hr.id = query.id;
     hr.email = query.email;
     hr.fullName = query.fullName;
     hr.company = query.company;
@@ -85,13 +107,7 @@ export class AdminService {
 
     try {
       if (!usersList) {
-        throw new HttpException(
-          {
-            status: HttpStatus.NO_CONTENT,
-            error: 'No file attached',
-          },
-          HttpStatus.NO_CONTENT,
-        );
+        console.log('No file attached');
       }
 
       if (fileExt !== '.json') {
@@ -100,50 +116,63 @@ export class AdminService {
             console.log('Cannot delete file after action', err);
           }
         });
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_ACCEPTABLE,
-            error: 'Bad file extension',
-          },
-          HttpStatus.NOT_ACCEPTABLE,
-        );
+        console.log('Bad file extension.');
       }
 
-      fs.readFile(filePath, 'utf-8', (err, data) => {
+        fs.readFile(filePath, 'utf-8', async (err, data) => {
         if (err) {
           console.log(`Error: ${err}`);
           return;
         }
 
         const parsedUsersList = JSON.parse(data);
+
         for (const newUser of parsedUsersList) {
-          console.log(newUser.role);
+          try {
+            const existingUserByEmail = await StudentUser.findOne({
+              where: { email: newUser.email },
+            });
+
+            if (existingUserByEmail) {
+              throw new Error('User with this email already exists');
+            }
+
+            const user = new StudentUser();
+            user.id = uuid();
+            user.email = newUser.email;
+            user.courseCompletion = newUser.courseCompletion ?? 0;
+            user.courseEngagment = newUser.courseEngagment ?? 0;
+            user.projectDegree = newUser.projectDegree ?? 0;
+            user.teamProjectDegree = newUser.teamProjectDegree ?? 0;
+            user.bonusProjectUrls = newUser.bonusProjectUrls ?? [];
+            await user.save();
+
+            console.log('User successfully added');
+          } catch (e) {
+            console.log('User cannot be added');
+          }
         }
       });
 
-      fs.unlink(
-        filePath,(err) => {
-          if (err) {
-            console.log('Cannot delete file after action',err);
-          }else{
-            console.log('Files uploaded');
-          }
-        },
-      );
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log('Cannot delete file after action', err);
+        } else {
+          console.log('Files uploaded');
+        }
+      });
     } catch (e) {
-      // fs.unlink(filePath, (err) => {
-      //   if (err) {
-      //     console.log(err);
-      //   }
-      // });
-      // throw e;
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.log(err);
+        }
+       });
+      throw e;
     }
 
     return {
-      name: '',
-      surname: '',
-      age: 0,
-      email: 'test@wewo.com',
+        status: 200,
+        message: 'ok'
     };
   }
 }
