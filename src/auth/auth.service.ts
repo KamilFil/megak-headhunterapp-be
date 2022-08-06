@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { Response } from 'express';
-import { AuthLoginDto, AuthLoginRes } from './dto/auth-login.dto';
+import { AuthLoginDto } from './dto/auth-login.dto';
 import { StudentUser } from '../student/student-user.entity';
 import { hashPwd } from '../utils/hash-pwd';
 import { v4 as uuid } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { JwtPayload } from './jwt.strategy';
+import { HrUser } from '../hr-user/hr-user.entity';
+import { Role } from 'types/auth/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -26,26 +28,50 @@ export class AuthService {
     };
   }
 
-  private async generateToken(user: StudentUser): Promise<string> {
+  private async generateToken(user: StudentUser | HrUser): Promise<string> {
     let token;
     let userWithThisToken = null;
-    do {
-      token = uuid();
-      userWithThisToken = await StudentUser.findOneBy({
-        currentTokenId: token,
-      });
-    } while (!!userWithThisToken);
+    if (user.roles === Role.Student) {
+      do {
+        token = uuid();
+        userWithThisToken = await StudentUser.findOneBy({
+          currentTokenId: token,
+        });
+      } while (!!userWithThisToken);
+    } else if (user.roles === Role.Hr) {
+      do {
+        token = uuid();
+        userWithThisToken = await StudentUser.findOneBy({
+          currentTokenId: token,
+        });
+      } while (!!userWithThisToken);
+    }
+
     user.currentTokenId = token;
     await user.save();
     return token;
   }
 
   async login(req: AuthLoginDto, res: Response): Promise<any> {
+    let user: StudentUser | HrUser = null;
+
     try {
-      const user = await StudentUser.findOneBy({
+      const student = await StudentUser.findOneBy({
         email: req.email,
         pwdHash: hashPwd(req.pwd),
       });
+
+      const hr = await HrUser.findOneBy({
+        email: req.email,
+        pwdHash: hashPwd(req.pwd),
+      });
+
+      if (student) {
+        user = student;
+      } else if (hr) {
+        user = hr;
+      }
+
       if (!user) {
         return res.json({ error: 'Invalid login data!' });
       }

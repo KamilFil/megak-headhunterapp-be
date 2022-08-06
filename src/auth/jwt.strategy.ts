@@ -3,6 +3,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { StudentUser } from '../student/student-user.entity';
 import { AuthLoginRes } from './dto/auth-login.dto';
+import { HrEntity } from '../../types';
+import { HrUser } from '../hr-user/hr-user.entity';
 
 export interface JwtPayload {
   id: string;
@@ -22,9 +24,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  filter(user: StudentUser): AuthLoginRes {
-    const { id, email, roles } = user;
-    return { id, email, roles };
+  filter(user: StudentUser | HrEntity): AuthLoginRes {
+    const { id, email, roles, currentTokenId } = user;
+    return { id, email, roles, currentTokenId };
   }
 
   async validate(payload: JwtPayload, done: (error, user) => void) {
@@ -32,11 +34,22 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       return done(new UnauthorizedException(), false);
     }
 
-    const user = await StudentUser.findOneBy({ currentTokenId: payload.id });
+    let user: any = null;
+
+    const student = await StudentUser.findOneBy({ currentTokenId: payload.id });
+    const hr = await HrUser.findOneBy({ currentTokenId: payload.id });
+
+    if (student) {
+      user = student;
+    } else if (hr) {
+      user = hr;
+    }
+
+    //@Todo Sprawdź czy można po ifach dać hr / admina i nastepnie wyrzucić błąd
+
     if (!user) {
       return done(new UnauthorizedException(), false);
     }
-
     done(null, this.filter(user));
   }
 }

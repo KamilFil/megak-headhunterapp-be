@@ -9,4 +9,6 @@ export class AuthLoginRes {
   id: string;
   email: string;
   roles: Role;
+  currentTokenId: string;
+  save?: () => void;
 }

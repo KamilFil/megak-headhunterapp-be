@@ -6,7 +6,11 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { expectedContractType, expectedTypeWork, hireStatus } from 'types';
+import {
+  expectedContractType,
+  expectedTypeWork,
+  hireStatus,
+} from '../../types';
 import { HrUser } from '../hr-user/hr-user.entity';
 import { Role } from '../../types/auth/role.enum';
 
