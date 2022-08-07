@@ -1,0 +1,1 @@
+export const SEND_GRID_KEY = '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';

@@ -117,7 +117,7 @@ export class StudentUser extends BaseEntity {
   courseCompletion: number;
 
   @Column({ default: 0 })
-  courseEngagment: number;
+  courseEngagement: number;
 
   @Column({ default: 0 })
   projectDegree: number;

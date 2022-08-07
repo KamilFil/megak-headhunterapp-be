@@ -27,7 +27,7 @@ export function storageDir() {
 
   return path.join(__dirname, '../../storage');
 }
-console.log(__dirname);
+
 export function multerStorage(dest: string) {
   return diskStorage({
     destination: (req, file, cb) => cb(null, dest),

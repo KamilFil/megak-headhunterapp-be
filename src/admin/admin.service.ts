@@ -6,6 +6,8 @@ import * as path from 'path';
 import { storageDir } from '../utils/storage';
 import { StudentUser } from '../student/student-user.entity';
 import { v4 as uuid } from 'uuid';
+import { errorContext } from 'rxjs/internal/util/errorContext';
+import { ValidationError } from '../utils/errors';
 
 @Injectable()
 export class AdminService {
@@ -107,7 +109,10 @@ export class AdminService {
 
     try {
       if (!usersList) {
-        console.log('No file attached');
+        return {
+          status: HttpStatus.NO_CONTENT,
+          messgae: 'No file attached',
+        };
       }
 
       if (fileExt !== '.json') {
@@ -116,41 +121,79 @@ export class AdminService {
             console.log('Cannot delete file after action', err);
           }
         });
-        console.log('Bad file extension.');
+        return {
+          status: HttpStatus.BAD_REQUEST,
+          message: 'Bad file extension',
+        };
       }
 
-        fs.readFile(filePath, 'utf-8', async (err, data) => {
+      fs.readFile(filePath, 'utf-8', async (err, data) => {
         if (err) {
-          console.log(`Error: ${err}`);
+          console.log(`Cannot read file`);
           return;
         }
 
         const parsedUsersList = JSON.parse(data);
 
         for (const newUser of parsedUsersList) {
-          try {
-            const existingUserByEmail = await StudentUser.findOne({
-              where: { email: newUser.email },
-            });
+          const existingUserByEmail = await StudentUser.findOne({
+            where: { email: newUser.email },
+          });
 
-            if (existingUserByEmail) {
-              throw new Error('User with this email already exists');
-            }
-
-            const user = new StudentUser();
-            user.id = uuid();
-            user.email = newUser.email;
-            user.courseCompletion = newUser.courseCompletion ?? 0;
-            user.courseEngagment = newUser.courseEngagment ?? 0;
-            user.projectDegree = newUser.projectDegree ?? 0;
-            user.teamProjectDegree = newUser.teamProjectDegree ?? 0;
-            user.bonusProjectUrls = newUser.bonusProjectUrls ?? [];
-            await user.save();
-
-            console.log('User successfully added');
-          } catch (e) {
-            console.log('User cannot be added');
+          if (newUser.email.indexOf('@') === -1) {
+            console.log('Bad email format');
+              continue;
           }
+          if (newUser.courseCompletion < 0 || newUser.courseCompletion > 5) {
+            console.log('Degree must be in 0-5');
+            continue;
+          }
+
+          if (newUser.courseEngagment < 0 || newUser.courseEngagment > 5) {
+            console.log('Degree must be in 0-5');
+            continue;
+          }
+
+          if (newUser.projectDegree < 0 || newUser.projectDegree > 5) {
+            console.log('Degree must be in 0-5');
+            continue;
+          }
+
+          if (newUser.teamProjectDegree < 0 || newUser.teamProjectDegree > 5) {
+            console.log('Degree must be in 0-5');
+            continue;
+          }
+
+
+          if (existingUserByEmail) {
+            const existingUserId = existingUserByEmail.id;
+            console.log(existingUserId);
+            await StudentUser.createQueryBuilder()
+                .update()
+                .set({
+                  courseCompletion: newUser.courseCompletion,
+                  courseEngagement: newUser.courseEngagement,
+                  projectDegree: newUser.projectDegree,
+                  teamProjectDegree: newUser.teamProjectDegree,
+                  bonusProjectUrls: newUser.bonusProjectUrls,
+                })
+                .where("id = :id",{id: existingUserId})
+                .execute()
+            console.log(`User: ${existingUserId} was updated`);
+            continue;
+          }
+
+          const user = new StudentUser();
+          user.id = uuid();
+          user.email = newUser.email;
+          user.courseCompletion = newUser.courseCompletion ?? 0;
+          user.courseEngagement = newUser.courseEngagement ?? 0;
+          user.projectDegree = newUser.projectDegree ?? 0;
+          user.teamProjectDegree = newUser.teamProjectDegree ?? 0;
+          user.bonusProjectUrls = newUser.bonusProjectUrls ?? [];
+          await user.save();
+
+          //return {status: HttpStatus.ACCEPTED, message: 'User successfully added'}
         }
       });
 
@@ -166,13 +209,13 @@ export class AdminService {
         if (err) {
           console.log(err);
         }
-       });
+      });
       throw e;
     }
 
     return {
-        status: 200,
-        message: 'ok'
+      status: HttpStatus.ACCEPTED,
+      message: `Dodano lub zaktualizowano wszystkich użytkowników z pliku`,
     };
   }
 }
