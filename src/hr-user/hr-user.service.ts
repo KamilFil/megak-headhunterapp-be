@@ -13,7 +13,9 @@ export class HrUserService {
     }
 
     async getAllStudents() {
-        return await StudentUser.find()
+        return await StudentUser.find({
+            where: {hireStatus: hireStatus.Available}
+        })
     }
 
     async getStudentsToCall(id) {
@@ -36,7 +38,12 @@ export class HrUserService {
             throw new ValidationError('Cannot change hire status.')
         }
 
-        return await this.studentService.setStudentStatusToHired(studentId);
+        student.hr = null
+        student.hireStatus = hireStatus.Hired;
+
+        await StudentUser.update(studentId, student);
+
+        return student;
     }
 
     async setUserStatusToAvailable(hrId: string, studentId: string) {
