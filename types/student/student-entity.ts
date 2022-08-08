@@ -1,6 +1,8 @@
 export interface StudentEntity {
+
   id: string;
   email: string;
+  // role: role.User;
   tel: string | null;
   firstName: string;
   lastName: string;
@@ -18,7 +20,7 @@ export interface StudentEntity {
   workExperience: string | null;
   courses: string | null;
   isActive: boolean;
-  hireStatus: string
+  hireStatus: string;
 }
 
 export enum expectedTypeWork {
@@ -26,7 +28,7 @@ export enum expectedTypeWork {
   ReadyToMove = 'Gotowość do przeprowadzki',
   Remote = 'Wyłącznie zdalnie',
   Hybrid = 'Hybrydowo',
-  Irrelevant = 'Bez znaczenia'
+  Irrelevant = 'Bez znaczenia',
 }
 
 export enum expectedContractType {
@@ -39,12 +41,11 @@ export enum expectedContractType {
 export enum hireStatus {
   Available = 'Dostępny',
   Interviewed = 'W trakcie rozmowy',
-  Hired = 'Zatrudniony'
-
+  Hired = 'Zatrudniony',
 }
 
 export type GetStudentUserResponse = StudentEntity;
 
 export type UpdateStudentUserResponse = StudentEntity;
 
-export type UpdateHireStatusResponse = StudentEntity | {message: string};
+export type UpdateHireStatusResponse = StudentEntity | { message: string };
