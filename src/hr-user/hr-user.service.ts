@@ -20,7 +20,10 @@ export class HrUserService {
 
     async getStudentsToCall(id) {
         return await StudentUser.find({
-            where: {hr: {id}},
+            where: {
+                hr: {id},
+                hireStatus: hireStatus.Interviewed,
+            },
         })
     }
 
@@ -85,4 +88,5 @@ export class HrUserService {
                 monthsOfCommercialExp: query.monthsOfCommercialExp,
             }})
     }
+
 }

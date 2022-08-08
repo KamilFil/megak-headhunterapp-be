@@ -1,4 +1,5 @@
 export interface StudentEntity {
+
   id: string;
   email: string;
   // role: role.User;

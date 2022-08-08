@@ -22,7 +22,7 @@ export class HrUserController {
         return this.hrUserService.getStudentsToCall(hrId);
     }
 
-    @Get('/call-list')
+    @Get('/call-list/filter')
     filterAllStudents(
         @Query() query: StudentEntity
     ) {
@@ -60,4 +60,5 @@ export class HrUserController {
     ): Promise<UpdateHireStatusResponse> {
         return this.hrUserService.setUserStatusToAvailable(hrId, studentId);
     }
+
 }
