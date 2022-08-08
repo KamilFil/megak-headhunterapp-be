@@ -1,7 +1,7 @@
 import { Role } from 'types/auth/role.enum';
 
 export interface StudentEntity {
-  id?: string;
+  id: string;
   email: string;
   pwdHash: string;
   roles: Role;

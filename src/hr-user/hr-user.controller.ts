@@ -36,7 +36,7 @@ export class HrUserController {
     return this.hrUserService.getStudentsToCall(hrId);
   }
 
-  @Get('/call-list')
+  @Get('/call-list/filter')
   @Roles(Role.Hr)
   filterAllStudents(@Query() query: StudentEntity) {
     return this.hrUserService.filterAllStudents(query);

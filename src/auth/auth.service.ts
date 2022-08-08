@@ -8,6 +8,7 @@ import { sign } from 'jsonwebtoken';
 import { JwtPayload } from './jwt.strategy';
 import { HrUser } from '../hr-user/hr-user.entity';
 import { Role } from 'types/auth/role.enum';
+import { AdminUser } from '../admin/admin.entity';
 
 @Injectable()
 export class AuthService {
@@ -28,15 +29,17 @@ export class AuthService {
     };
   }
 
-  private async generateToken(user: StudentUser | HrUser): Promise<string> {
+  private async generateToken(
+    user: StudentUser | HrUser | AdminUser,
+  ): Promise<string> {
     let token;
     let userWithThisToken = null;
-    console.log(`To jest user`, user);
+    console.log(`To jest user w GenerowaniuTokenu`, user);
 
-    if (HrUser) {
+    if (user.roles === Role.Student) {
       do {
         token = uuid();
-        userWithThisToken = await HrUser.findOneBy({
+        userWithThisToken = await StudentUser.findOneBy({
           currentTokenId: token,
         });
         console.log(token);
@@ -45,7 +48,17 @@ export class AuthService {
       user.currentTokenId = token;
       await user.save();
       return token;
-    } else if (StudentUser) {
+    } else if (user.roles === Role.Hr) {
+      do {
+        token = uuid();
+        userWithThisToken = await HrUser.findOneBy({
+          currentTokenId: token,
+        });
+      } while (!!userWithThisToken);
+      user.currentTokenId = token;
+      await user.save();
+      return token;
+    } else if (user.roles === Role.Admin) {
       do {
         token = uuid();
         userWithThisToken = await StudentUser.findOneBy({
@@ -61,7 +74,7 @@ export class AuthService {
   }
 
   async login(req: AuthLoginDto, res: Response): Promise<any> {
-    let user: StudentUser | HrUser = null;
+    let user: StudentUser | HrUser | AdminUser = null;
 
     try {
       const student = await StudentUser.findOneBy({
@@ -72,16 +85,23 @@ export class AuthService {
         email: req.email,
         pwdHash: hashPwd(req.pwd),
       });
+      const admin = await AdminUser.findOneBy({
+        email: req.email,
+        pwdHash: hashPwd(req.pwd),
+      });
 
       if (student) {
         user = student;
       } else if (hr) {
         user = hr;
+      } else if (admin) {
+        user = admin;
       }
-
+      console.log(`To jest user w logowaniu`, user);
       if (!user) {
         return res.json({ error: 'Invalid login data!', status: 404 });
       }
+
       const token = await this.createToken(await this.generateToken(user));
 
       return res
@@ -96,17 +116,34 @@ export class AuthService {
     }
   }
 
-  async logout(user: StudentUser | HrUser, res: Response) {
-    console.log(user);
+  async logout(user: StudentUser | HrUser | AdminUser, res: Response) {
+    console.log('To jest user w wylogowaniu', user);
     try {
-      user.currentTokenId = null;
-      await StudentUser.save(user);
-
-      res.clearCookie('jwt', {
-        secure: false,
-        domain: 'localhost',
-        httpOnly: true,
-      });
+      if (user.roles === Role.Student) {
+        user.currentTokenId = null;
+        await StudentUser.save(user);
+        res.clearCookie('jwt', {
+          secure: false,
+          domain: 'localhost',
+          httpOnly: true,
+        });
+      } else if (user.roles === Role.Hr) {
+        user.currentTokenId = null;
+        await HrUser.save(user);
+        res.clearCookie('jwt', {
+          secure: false,
+          domain: 'localhost',
+          httpOnly: true,
+        });
+      } else if (user.roles === Role.Admin) {
+        user.currentTokenId = null;
+        await AdminUser.save(user);
+        res.clearCookie('jwt', {
+          secure: false,
+          domain: 'localhost',
+          httpOnly: true,
+        });
+      }
 
       return res.json({ ok: true });
     } catch (e) {

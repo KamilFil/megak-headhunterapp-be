@@ -7,7 +7,6 @@ import { StudentUser } from '../student/student-user.entity';
 import { HrUser } from '../hr-user/hr-user.entity';
 import { UserObj } from '../decorators/user-obj.decorator';
 
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

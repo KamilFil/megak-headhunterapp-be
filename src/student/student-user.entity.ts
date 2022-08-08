@@ -55,6 +55,7 @@ export class StudentUser extends BaseEntity {
 
   @Column('varchar', {
     unique: true,
+    nullable: true,
   })
   githubUsername: string;
 
@@ -128,6 +129,21 @@ export class StudentUser extends BaseEntity {
     default: hireStatus.Available,
   })
   hireStatus: hireStatus;
+
+  @Column({ default: 0 })
+  courseCompletion: number;
+
+  @Column({ default: 0 })
+  courseEngagement: number;
+
+  @Column({ default: 0 })
+  projectDegree: number;
+
+  @Column({ default: 0 })
+  teamProjectDegree: number;
+
+  @Column('simple-array')
+  bonusProjectUrls: string[] = [];
 
   @ManyToOne((type) => HrUser, (entity) => entity.studentsToCall, {
     eager: true,
