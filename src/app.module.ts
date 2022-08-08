@@ -1,19 +1,25 @@
-import {Module, Post} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+// import { HrController } from './hr/hr.controller';
+// import { HrModule } from './hr/hr.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { dbConfig } from './config/db.config';
 import { StudentModule } from './student/student.module';
 import { HrUserModule } from './hr-user/hr-user.module';
+import {AdminModule} from "./admin/admin.module";
+import {ConfigModule} from "@nestjs/config";
 
 @Module({
   imports: [
     TypeOrmModule.forRoot(dbConfig),
     StudentModule,
     HrUserModule,
+      AdminModule,
+      ConfigModule.forRoot()
     // HrModule,
   ],
-  controllers: [AppController /* HrController */],
+  controllers: [AppController,/* HrController */],
   providers: [AppService],
 })
 export class AppModule {
