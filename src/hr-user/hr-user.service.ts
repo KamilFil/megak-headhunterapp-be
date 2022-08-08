@@ -13,12 +13,17 @@ export class HrUserService {
     }
 
     async getAllStudents() {
-        return await StudentUser.find()
+        return await StudentUser.find({
+            where: {hireStatus: hireStatus.Available}
+        })
     }
 
     async getStudentsToCall(id) {
         return await StudentUser.find({
-            where: {hr: {id}},
+            where: {
+                hr: {id},
+                hireStatus: hireStatus.Interviewed,
+            },
         })
     }
 
