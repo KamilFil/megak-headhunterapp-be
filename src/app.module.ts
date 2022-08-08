@@ -9,8 +9,6 @@ import { StudentModule } from './student/student.module';
 import { HrUserModule } from './hr-user/hr-user.module';
 import {AdminModule} from "./admin/admin.module";
 import {ConfigModule} from "@nestjs/config";
-import { SendgridService } from './sendgrid/sendgrid.service';
-import { MailController } from './mail/mail.controller';
 
 @Module({
   imports: [
@@ -21,8 +19,8 @@ import { MailController } from './mail/mail.controller';
       ConfigModule.forRoot()
     // HrModule,
   ],
-  controllers: [AppController, MailController /* HrController */],
-  providers: [AppService, SendgridService],
+  controllers: [AppController,/* HrController */],
+  providers: [AppService],
 })
 export class AppModule {
   constructor() {
