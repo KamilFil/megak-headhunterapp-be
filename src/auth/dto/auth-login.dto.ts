@@ -10,5 +10,5 @@ export class AuthLoginRes {
   email: string;
   roles: Role;
   currentTokenId: string;
-  save?: () => void;
+  // save?: () => void;
 }

@@ -14,22 +14,23 @@ import {
   UpdateStudentUserResponse,
 } from 'types';
 import { StudentUser } from './student-user.entity';
-import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from 'types/auth/role.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('student')
 export class StudentController {
   constructor(@Inject(StudentService) private studentService: StudentService) {}
   @Get('/:id')
-  @Roles(Role.Student, Role.Hr)
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.Hr, Role.Student)
   getStudentUser(@Param('id') id: string): Promise<GetStudentUserResponse> {
     return this.studentService.getStudentUser(id);
   }
 
   @Patch('/:id')
+  @Roles(Role.Student)
   updateStudentUser(
     @Param('id') id: string,
     @Body() updatedStudent: StudentUser,
@@ -38,6 +39,7 @@ export class StudentController {
   }
 
   @Patch('/hired/:id')
+  @Roles(Role.Hr)
   updateHireStatus(@Param('id') id: string): Promise<UpdateHireStatusResponse> {
     return this.studentService.setStudentStatusToHired(id);
   }

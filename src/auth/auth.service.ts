@@ -31,25 +31,33 @@ export class AuthService {
   private async generateToken(user: StudentUser | HrUser): Promise<string> {
     let token;
     let userWithThisToken = null;
-    if (user.roles === Role.Student) {
-      do {
-        token = uuid();
-        userWithThisToken = await StudentUser.findOneBy({
-          currentTokenId: token,
-        });
-      } while (!!userWithThisToken);
-    } else if (user.roles === Role.Hr) {
-      do {
-        token = uuid();
-        userWithThisToken = await StudentUser.findOneBy({
-          currentTokenId: token,
-        });
-      } while (!!userWithThisToken);
-    }
+    console.log(`To jest user`, user);
 
-    user.currentTokenId = token;
-    await user.save();
-    return token;
+    if (HrUser) {
+      do {
+        token = uuid();
+        userWithThisToken = await HrUser.findOneBy({
+          currentTokenId: token,
+        });
+        console.log(token);
+      } while (!!userWithThisToken);
+
+      user.currentTokenId = token;
+      await user.save();
+      return token;
+    } else if (StudentUser) {
+      do {
+        token = uuid();
+        userWithThisToken = await StudentUser.findOneBy({
+          currentTokenId: token,
+        });
+        console.log(token);
+      } while (!!userWithThisToken);
+
+      user.currentTokenId = token;
+      await user.save();
+      return token;
+    }
   }
 
   async login(req: AuthLoginDto, res: Response): Promise<any> {
@@ -60,7 +68,6 @@ export class AuthService {
         email: req.email,
         pwdHash: hashPwd(req.pwd),
       });
-
       const hr = await HrUser.findOneBy({
         email: req.email,
         pwdHash: hashPwd(req.pwd),
@@ -73,7 +80,7 @@ export class AuthService {
       }
 
       if (!user) {
-        return res.json({ error: 'Invalid login data!' });
+        return res.json({ error: 'Invalid login data!', status: 404 });
       }
       const token = await this.createToken(await this.generateToken(user));
 
@@ -86,6 +93,24 @@ export class AuthService {
         .json({ ok: true });
     } catch (e) {
       return res.json({ error: e.message });
+    }
+  }
+
+  async logout(user: StudentUser | HrUser, res: Response) {
+    console.log(user);
+    try {
+      user.currentTokenId = null;
+      await StudentUser.save(user);
+
+      res.clearCookie('jwt', {
+        secure: false,
+        domain: 'localhost',
+        httpOnly: true,
+      });
+
+      return res.json({ ok: true });
+    } catch (e) {
+      return res.json({ error: 'Bład' });
     }
   }
 }
