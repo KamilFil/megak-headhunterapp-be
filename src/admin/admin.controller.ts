@@ -7,10 +7,10 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { HrUser } from '../hr-user/hr-user.entity';;
+import { HrUser } from '../hr-user/hr-user.entity';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import * as path from 'path';
-import {multerStorage, storageDir} from '../utils/storage';
+import { multerStorage, storageDir } from '../utils/storage';
 import { MulterDiskUploadedFiles } from '../interfaces/files';
 
 @Controller('admin')

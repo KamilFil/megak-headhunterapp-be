@@ -1,4 +1,7 @@
+import { Role } from '../auth/role.enum';
+
 export interface AdminEntity {
-  email: string,
-  password: string,
+  email: string;
+  pwdHash: string;
+  role: Role.Admin;
 }
