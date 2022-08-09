@@ -6,8 +6,13 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { expectedContractType, expectedTypeWork, hireStatus } from 'types';
+import {
+  expectedContractType,
+  expectedTypeWork,
+  hireStatus,
+} from '../../types';
 import { HrUser } from '../hr-user/hr-user.entity';
+import { Role } from '../../types/auth/role.enum';
 
 @Entity()
 export class StudentUser extends BaseEntity {
@@ -19,6 +24,18 @@ export class StudentUser extends BaseEntity {
     unique: true,
   })
   email: string;
+
+  @Column()
+  pwdHash: string;
+
+  @Column()
+  roles: Role.Student;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  currentTokenId: string | null;
 
   @Column('varchar', {
     length: 16,
@@ -38,7 +55,7 @@ export class StudentUser extends BaseEntity {
 
   @Column('varchar', {
     unique: true,
-    nullable:true,
+    nullable: true,
   })
   githubUsername: string;
 

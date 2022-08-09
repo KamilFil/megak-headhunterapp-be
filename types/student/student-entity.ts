@@ -1,8 +1,11 @@
-export interface StudentEntity {
+import { Role } from 'types/auth/role.enum';
 
+export interface StudentEntity {
   id: string;
   email: string;
-  // role: role.User;
+  pwdHash: string;
+  roles: Role;
+  currentTokenId: string | null;
   tel: string | null;
   firstName: string;
   lastName: string;

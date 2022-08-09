@@ -11,7 +11,7 @@ export function storageDir() {
         if (err) {
           console.log('err');
         }
-      })
+      });
     }
   });
 
@@ -21,7 +21,7 @@ export function storageDir() {
         if (err) {
           console.log('err');
         }
-      })
+      });
     }
   });
 
