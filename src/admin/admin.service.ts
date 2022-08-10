@@ -8,6 +8,8 @@ import { StudentUser } from '../student/student-user.entity';
 import { v4 as uuid } from 'uuid';
 import * as SendGrid from '@sendgrid/mail';
 import { SEND_GRID_KEY } from '../config/mailer.config';
+import { Role } from '../../types/auth/role.enum';
+import { hashPwd } from '../utils/hash-pwd';
 
 @Injectable()
 export class AdminService {
@@ -89,6 +91,7 @@ export class AdminService {
     hr.fullName = query.fullName;
     hr.company = query.company;
     hr.maxReservedStudents = query.maxReservedStudents;
+    hr.roles = Role.Hr;
     await hr.save();
 
     throw new HttpException(
@@ -111,7 +114,7 @@ export class AdminService {
       if (!usersList) {
         return {
           status: HttpStatus.NO_CONTENT,
-          messgae: 'No file attached',
+          message: 'No file attached',
         };
       }
 
@@ -182,6 +185,9 @@ export class AdminService {
             continue;
           }
 
+          const pwd = await this.genPwd();
+          const pwdHash = hashPwd(pwd);
+
           const user = new StudentUser();
           user.id = uuid();
           user.email = newUser.email;
@@ -190,15 +196,12 @@ export class AdminService {
           user.projectDegree = newUser.projectDegree ?? 0;
           user.teamProjectDegree = newUser.teamProjectDegree ?? 0;
           user.bonusProjectUrls = newUser.bonusProjectUrls ?? [];
+          user.pwdHash = pwdHash;
+          user.isActive = false;
+          user.roles = Role.Student;
           await user.save();
 
-          //dodanie generowania hasła, zapis jego haszu do bazy
-          const pwdHash = 'haslo12345';
-          //Dodanie endpointu do aktywowania konta usera
-          const activationLink = `https:localhost:3001/activate/${user.id}`;
-          const htmlContent = `Twój login to <strong>${newUser.email}</strong></br>Twoje hasło to: ${pwdHash}</br>Aby aktywować swoje konto, kliknij <strong><a href="${activationLink}">tutaj</a></strong>`;
-          await this.send(newUser.email, htmlContent);
-          //return {status: HttpStatus.ACCEPTED, message: 'User successfully added'}
+          await this.send(user.email, pwd, user.id);
         }
       });
 
@@ -224,16 +227,20 @@ export class AdminService {
     };
   }
 
-  async send(mailReceiver: string, htmlContent: string) {
+  async send(mailReceiver: string, pwd: string, userId: string) {
     const sgMail = SendGrid;
-    //const href = '<a href="https://platforma.megak.pl">Link aktywacyjny</a>';
+    const domain = 'https://localhost:3001/user/activate/';
     sgMail.setApiKey(SEND_GRID_KEY);
     const msg = {
       to: mailReceiver, // Change to your recipient
       from: 'g14bonus@int.pl', // Change to your verified sender
       subject: 'Zaproszenie do portalu',
       text: 'Witaj na platformie rekrutacyjnej!',
-      html: htmlContent,
+      html: `Twój login to <strong>${mailReceiver}</strong>
+            </br>
+             Twoje hasło to: ${pwd}
+             </br>
+             Aby aktywować swoje konto, kliknij <strong><a href="${domain}${userId}">tutaj</a></strong>`,
     };
     await sgMail
       .send(msg)
@@ -243,5 +250,17 @@ export class AdminService {
       .catch((error) => {
         console.error(error);
       });
+  }
+
+  async genPwd() {
+    const chars =
+      '0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const pwdLength = 12;
+    let pwd = '';
+    for (let i = 0; i <= pwdLength; i++) {
+      const randomNumber = Math.floor(Math.random() * chars.length);
+      pwd += chars.substring(randomNumber, randomNumber + 1);
+    }
+    return pwd;
   }
 }
