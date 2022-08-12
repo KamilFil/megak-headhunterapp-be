@@ -7,7 +7,7 @@ import { storageDir } from '../utils/storage';
 import { StudentUser } from '../student/student-user.entity';
 import { v4 as uuid } from 'uuid';
 import * as SendGrid from '@sendgrid/mail';
-import { SEND_GRID_KEY } from '../config/mailer.config';
+import {SEND_GRID_ACCOUNT, SEND_GRID_KEY} from '../config/mailer.config';
 import { Role } from '../../types/auth/role.enum';
 import { hashPwd } from '../utils/hash-pwd';
 
@@ -233,7 +233,7 @@ export class AdminService {
     sgMail.setApiKey(SEND_GRID_KEY);
     const msg = {
       to: mailReceiver, // Change to your recipient
-      from: 'g14bonus@int.pl', // Change to your verified sender
+      from: SEND_GRID_ACCOUNT, // Change to your verified sender
       subject: 'Zaproszenie do portalu',
       text: 'Witaj na platformie rekrutacyjnej!',
       html: `Twój login to <strong>${mailReceiver}</strong>
