@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller, Get,
   Inject,
   Post,
@@ -24,8 +25,8 @@ export class AdminController {
   @Post('/create-hr')
   @Roles(Role.Admin)
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  createHrByAdmin(@Query() query: HrUser) {
-    return this.adminService.createHrByAdmin(query);
+  createHrByAdmin(@Body() body: HrUser) {
+    return this.adminService.createHrByAdmin(body);
   }
 
   @Post('/upload-users-list')

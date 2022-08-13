@@ -7,14 +7,14 @@ import { storageDir } from '../utils/storage';
 import { StudentUser } from '../student/student-user.entity';
 import { v4 as uuid } from 'uuid';
 import * as SendGrid from '@sendgrid/mail';
-import {SEND_GRID_ACCOUNT, SEND_GRID_KEY} from '../config/mailer.config';
+import { SEND_GRID_ACCOUNT, SEND_GRID_KEY } from '../config/mailer.config';
 import { Role } from '../../types/auth/role.enum';
 import { hashPwd } from '../utils/hash-pwd';
 
 @Injectable()
 export class AdminService {
-  async createHrByAdmin(query: HrUser) {
-    const existingHr = await HrUser.findOne({ where: { email: query.email } });
+  async createHrByAdmin(body: HrUser) {
+    const existingHr = await HrUser.findOne({ where: { email: body.email } });
     if (existingHr) {
       throw new HttpException(
         {
@@ -25,11 +25,7 @@ export class AdminService {
       );
     }
 
-    if (
-      query.email === null ||
-      query.email === '' ||
-      query.email === undefined
-    ) {
+    if (body.email === null || body.email === '' || body.email === undefined) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -39,7 +35,7 @@ export class AdminService {
       );
     }
 
-    if (query.email.indexOf('@') === -1) {
+    if (body.email.indexOf('@') === -1) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -50,9 +46,9 @@ export class AdminService {
     }
 
     if (
-      query.fullName === null ||
-      query.fullName === '' ||
-      query.fullName === undefined
+      body.fullName === null ||
+      body.fullName === '' ||
+      body.fullName === undefined
     ) {
       throw new HttpException(
         {
@@ -63,9 +59,9 @@ export class AdminService {
       );
     }
     if (
-      query.company === null ||
-      query.company === '' ||
-      query.company === undefined
+      body.company === null ||
+      body.company === '' ||
+      body.company === undefined
     ) {
       throw new HttpException(
         {
@@ -76,7 +72,7 @@ export class AdminService {
       );
     }
 
-    if (query.maxReservedStudents < 1 || query.maxReservedStudents > 999) {
+    if (body.maxReservedStudents < 1 || body.maxReservedStudents > 999) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -87,10 +83,10 @@ export class AdminService {
     }
 
     const hr = new HrUser();
-    hr.email = query.email;
-    hr.fullName = query.fullName;
-    hr.company = query.company;
-    hr.maxReservedStudents = query.maxReservedStudents;
+    hr.email = body.email;
+    hr.fullName = body.fullName;
+    hr.company = body.company;
+    hr.maxReservedStudents = body.maxReservedStudents;
     hr.roles = Role.Hr;
     await hr.save();
 
