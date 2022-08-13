@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+ import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { Role } from '../../types/auth/role.enum';
 
 @Entity()

@@ -6,8 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { StudentUser } from '../student/student-user.entity';
-import { StudentEntity } from '../../types';
-import { Role } from 'types/auth/role.enum';
+import { StudentEntity } from 'types';
+import { Role } from 'types';
 
 @Entity()
 export class HrUser extends BaseEntity {
