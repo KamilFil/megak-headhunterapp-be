@@ -7,7 +7,7 @@ import { storageDir } from '../utils/storage';
 import { StudentUser } from '../student/student-user.entity';
 import { v4 as uuid } from 'uuid';
 import * as SendGrid from '@sendgrid/mail';
-import {SEND_GRID_ACCOUNT, SEND_GRID_KEY} from '../config/mailer.config';
+import { SEND_GRID_ACCOUNT, SEND_GRID_KEY } from '../config/mailer.config';
 import { Role } from '../../types/auth/role.enum';
 import { hashPwd } from '../utils/hash-pwd';
 

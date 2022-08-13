@@ -4,7 +4,8 @@ import {
   Get,
   Inject,
   Param,
-  Patch, Redirect,
+  Patch,
+  Redirect,
   UseGuards,
 } from '@nestjs/common';
 import { StudentService } from './student.service';
@@ -18,7 +19,6 @@ import { Roles } from '../decorators/roles.decorator';
 import { Role } from 'types/auth/role.enum';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
-
 
 @Controller('student')
 export class StudentController {
@@ -49,8 +49,7 @@ export class StudentController {
 
   @Patch('activate/:id')
   @Redirect('http://localhost:3000/')
-  updateIsActive(@Param('id') id: string){
+  updateIsActive(@Param('id') id: string) {
     return this.studentService.setStudentAccountToActive(id);
   }
-
 }

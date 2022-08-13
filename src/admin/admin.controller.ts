@@ -1,9 +1,11 @@
 import {
-  Controller, Get,
+  Controller,
+  Get,
   Inject,
   Post,
   Query,
-  UploadedFiles, UseGuards,
+  UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AdminService } from './admin.service';
@@ -12,10 +14,10 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import * as path from 'path';
 import { multerStorage, storageDir } from '../utils/storage';
 import { MulterDiskUploadedFiles } from '../interfaces/files';
-import {AuthGuard} from "@nestjs/passport";
-import {RolesGuard} from "../guards/roles.guard";
-import {Roles} from "../decorators/roles.decorator";
-import {Role} from "../../types/auth/role.enum";
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
+import { Role } from '../../types/auth/role.enum';
 
 @Controller('admin')
 export class AdminController {
@@ -45,5 +47,4 @@ export class AdminController {
   uploadUsersList(@UploadedFiles() files: MulterDiskUploadedFiles) {
     return this.adminService.uploadNewUsersList(files);
   }
-
 }

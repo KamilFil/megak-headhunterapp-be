@@ -1,4 +1,4 @@
-import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { StudentUser } from './student-user.entity';
 import { hireStatus } from '../../types';
 import axios from 'axios';
@@ -101,12 +101,12 @@ export class StudentService {
     return user;
   }
 
-    async setStudentAccountToActive(id: string) {
-        const user = await StudentUser.findOneOrFail({where: {id}});
+  async setStudentAccountToActive(id: string) {
+    const user = await StudentUser.findOneOrFail({ where: { id } });
 
-        user.isActive = true;
-        await user.save();
+    user.isActive = true;
+    await user.save();
 
-        return {status: HttpStatus.ACCEPTED, message: 'Activation complete'}
-    }
+    return { status: HttpStatus.ACCEPTED, message: 'Activation complete' };
+  }
 }

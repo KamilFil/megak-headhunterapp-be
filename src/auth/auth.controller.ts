@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Req,
   Res,
   UseGuards,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { HrUser } from '../hr-user/hr-user.entity';
 import { UserObj } from '../decorators/user-obj.decorator';
 import { Roles } from '../decorators/roles.decorator';
 import { Role } from '../../types/auth/role.enum';
+import { JwtAuthGuard } from './jwt-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -25,6 +27,13 @@ export class AuthController {
   async login(@Body() req: AuthLoginDto, @Res() res: Response): Promise<any> {
     return this.authService.login(req, res);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('profile')
+  getProfile(@Req() req) {
+    return req.user;
+  }
+
   @Get('/logout')
   @UseGuards(AuthGuard('jwt'))
   async logout(@UserObj() user: StudentUser | HrUser, @Res() res: Response) {

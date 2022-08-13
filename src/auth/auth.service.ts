@@ -29,7 +29,7 @@ export class AuthService {
     };
   }
 
-  private async generateToken(
+  private static async generateToken(
     user: StudentUser | HrUser | AdminUser,
   ): Promise<string> {
     let token;
@@ -102,7 +102,9 @@ export class AuthService {
       if (!user) {
         return res.json({ error: 'Invalid login data!', status: 404 });
       }
-      const token = await this.createToken(await this.generateToken(user));
+      const token = await this.createToken(
+        await AuthService.generateToken(user),
+      );
 
       return res
         .cookie('jwt', token.accessToken, {
