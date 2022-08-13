@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 import { sign } from 'jsonwebtoken';
 import { JwtPayload } from './jwt.strategy';
 import { HrUser } from '../hr-user/hr-user.entity';
-import { Role } from 'types/auth/role.enum';
+import { getUserByCurrentTokenIdResponse, Role } from 'types/auth/role.enum';
 import { AdminUser } from '../admin/admin.entity';
 
 @Injectable()
@@ -148,6 +148,43 @@ export class AuthService {
       return res.json({ ok: true });
     } catch (e) {
       return res.json({ error: 'Bład' });
+    }
+  }
+
+  async getUserByCurrentTokenId(
+    currentTokenId: string,
+    res: Response,
+  ): Promise<getUserByCurrentTokenIdResponse> {
+    let user: StudentUser | HrUser | AdminUser = null;
+
+    try {
+      const student = await StudentUser.findOneBy({
+        currentTokenId: currentTokenId,
+      });
+      const hr = await HrUser.findOneBy({
+        currentTokenId: currentTokenId,
+      });
+      const admin = await AdminUser.findOneBy({
+        currentTokenId: currentTokenId,
+      });
+
+      if (student) {
+        user = student;
+      } else if (hr) {
+        user = hr;
+      } else if (admin) {
+        user = admin;
+      }
+
+      console.log(user);
+
+      if (!user) {
+        return res.json({ error: 'Cannot find user!', status: 404 });
+      }
+
+      return res.json(user);
+    } catch (e) {
+      return res.json({ error: e.message });
     }
   }
 }
