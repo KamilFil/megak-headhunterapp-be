@@ -81,6 +81,7 @@ export class AuthService {
         email: req.email,
         pwdHash: hashPwd(req.pwd),
       });
+
       const hr = await HrUser.findOneBy({
         email: req.email,
         pwdHash: hashPwd(req.pwd),
@@ -97,11 +98,10 @@ export class AuthService {
       } else if (admin) {
         user = admin;
       }
-      console.log(`To jest user w logowaniu`, user);
+
       if (!user) {
         return res.json({ error: 'Invalid login data!', status: 404 });
       }
-
       const token = await this.createToken(await this.generateToken(user));
 
       return res
@@ -110,9 +110,9 @@ export class AuthService {
           domain: 'localhost',
           httpOnly: true,
         })
-        .json({ ok: true });
+        .json({ ok: true, roles: user.roles, jwt: token });
     } catch (e) {
-      return res.json({ error: e.message });
+      return res.json({ error: 'Cookie res' });
     }
   }
 

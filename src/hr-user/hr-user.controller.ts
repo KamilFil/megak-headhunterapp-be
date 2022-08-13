@@ -19,31 +19,31 @@ import { Role } from '../../types/auth/role.enum';
 import { RolesGuard } from '../guards/roles.guard';
 import { AuthGuard } from '@nestjs/passport';
 
+@Roles(Role.Hr)
 @UseGuards(AuthGuard('jwt'), RolesGuard)
 @Controller('hr-user')
 export class HrUserController {
   constructor(@Inject(HrUserService) private hrUserService: HrUserService) {}
 
-  @Get('/')
   @Roles(Role.Hr)
+  @Get('/')
   getAllStudents(): Promise<StudentUser[]> {
     return this.hrUserService.getAllStudents();
   }
-
-  @Get('/call-list/:hrId')
   @Roles(Role.Hr)
+  @Get('/call-list/:hrId')
   getAllStudentsToCall(@Param('hrId') hrId: string): Promise<StudentUser[]> {
     return this.hrUserService.getStudentsToCall(hrId);
   }
 
-  @Get('/call-list/filter')
   @Roles(Role.Hr)
+  @Get('/call-list/filter')
   filterAllStudents(@Query() query: StudentEntity) {
     return this.hrUserService.filterAllStudents(query);
   }
 
-  @Patch('/call/:hrId/:studentId')
   @Roles(Role.Hr)
+  @Patch('/call/:hrId/:studentId')
   setUserStatusToInterviewed(
     @Param('hrId') hrId: string,
     @Param('studentId') studentId: string,
@@ -51,8 +51,8 @@ export class HrUserController {
     return this.hrUserService.setUserStatusToInterviewed(hrId, studentId);
   }
 
-  @Get('/student-cv/:hrId/:studentId')
   @Roles(Role.Hr)
+  @Get('/student-cv/:hrId/:studentId')
   getStudentCv(
     @Param('studentId') studentId: string,
     @Param('hrId') hrId: string,
