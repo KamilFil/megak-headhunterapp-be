@@ -4,7 +4,7 @@ export interface StudentEntity {
   id: string;
   email: string;
   pwdHash: string;
-  roles: Role;
+  roles: Role.Student;
   currentTokenId: string | null;
   tel: string | null;
   firstName: string;

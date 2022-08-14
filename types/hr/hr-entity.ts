@@ -5,7 +5,7 @@ export interface HrEntity {
   email: string;
   pwdHash: string;
   currentTokenId: string | null;
-  roles: Role;
+  roles: Role.Hr;
   fullName: string;
   company: string;
   maxReservedStudents: number;

@@ -39,13 +39,4 @@ export class AuthController {
   async logout(@UserObj() user: StudentUser | HrUser, @Res() res: Response) {
     return this.authService.logout(user, res);
   }
-
-  @Get('/user/:currentTokenId')
-  @UseGuards(AuthGuard('jwt'))
-  async getUserByCurrentTokenId(
-    @Param('currentTokenId') currentTokenId: string,
-    @Res() res: Response,
-  ) {
-    return this.authService.getUserByCurrentTokenId(currentTokenId, res);
-  }
 }
