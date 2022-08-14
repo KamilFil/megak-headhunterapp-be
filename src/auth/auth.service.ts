@@ -17,7 +17,7 @@ export class AuthService {
     expiresIn: number;
   }> {
     const payload: JwtPayload = { id: currentTokenId };
-    const expiresIn = 60 * 60 * 24;
+    const expiresIn = 60 * 24;
     const accessToken = sign(
       payload,
       'awdadwad2qe12d12d2d212d 21d12d12 2 d@@!!3123C@X#2d2d13d213d12d3213d123d12',
@@ -34,7 +34,6 @@ export class AuthService {
   ): Promise<string> {
     let token;
     let userWithThisToken = null;
-    console.log(`To jest user w GenerowaniuTokenu`, user);
 
     if (user.roles === Role.Student) {
       do {
@@ -42,7 +41,6 @@ export class AuthService {
         userWithThisToken = await StudentUser.findOneBy({
           currentTokenId: token,
         });
-        console.log(token);
       } while (!!userWithThisToken);
 
       user.currentTokenId = token;
@@ -64,7 +62,6 @@ export class AuthService {
         userWithThisToken = await StudentUser.findOneBy({
           currentTokenId: token,
         });
-        console.log(token);
       } while (!!userWithThisToken);
 
       user.currentTokenId = token;
@@ -112,7 +109,7 @@ export class AuthService {
           domain: 'localhost',
           httpOnly: true,
         })
-        .json({ ok: true, roles: user.roles  });
+        .json({ ok: true, roles: user.roles });
     } catch (e) {
       return res.json({ error: 'Cookie res' });
     }
@@ -147,7 +144,7 @@ export class AuthService {
         });
       }
 
-      return res.json({ ok: true});
+      return res.json({ ok: true });
     } catch (e) {
       return res.json({ error: 'Bład' });
     }
