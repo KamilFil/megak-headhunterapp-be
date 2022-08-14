@@ -24,6 +24,22 @@ export interface StudentEntity {
   courses: string | null;
   isActive: boolean;
   hireStatus: string;
+  courseCompletion: number;
+  courseEngagement: number;
+  projectDegree: number;
+  teamProjectDegree: number;
+}
+
+export interface StudentEntityFilters {
+  courseCompletion?: number | null;
+  courseEngagement?: number | null;
+  projectDegree?: number | null;
+  teamProjectDegree?: number | null;
+  expectedTypeWork?: string | null;
+  expectedContractType?: string | null;
+  expectedSalary?: number | null;
+  canTakeApprenticeship?: boolean | null;
+  monthsOfCommercialExp?: number | null;
 }
 
 export enum expectedTypeWork {

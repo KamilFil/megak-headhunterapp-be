@@ -1,9 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   Inject,
   Param,
-  Patch,
+  Patch, Post,
   Query,
   UseGuards,
 } from '@nestjs/common';
@@ -11,7 +12,7 @@ import { HrUserService } from './hr-user.service';
 import { StudentUser } from '../student/student-user.entity';
 import {
   GetStudentUserResponse,
-  StudentEntity,
+  StudentEntity, StudentEntityFilters,
   UpdateHireStatusResponse,
 } from '../../types';
 import { Roles } from '../decorators/roles.decorator';
@@ -37,9 +38,9 @@ export class HrUserController {
   }
 
   @Roles(Role.Hr)
-  @Get('/call-list/filter')
-  filterAllStudents(@Query() query: StudentEntity) {
-    return this.hrUserService.filterAllStudents(query);
+  @Post('/users/filter')
+  filterAllStudents(@Body() body: StudentEntityFilters) {
+    return this.hrUserService.filterAllStudents(body);
   }
 
   @Roles(Role.Hr)

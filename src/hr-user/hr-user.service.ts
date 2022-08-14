@@ -79,15 +79,25 @@ export class HrUserService {
     return student;
   }
 
-  async filterAllStudents(query) {
-    return await StudentUser.find({
+  async filterAllStudents(body) {
+    console.log(body);
+
+    const students = await StudentUser.find({
       where: {
-        expectedTypeWork: query.expectedTypeWork,
-        expectedContractType: query.expectedContractType,
-        expectedSalary: query.expectedSalary,
-        canTakeApprenticeship: query.canTakeApprenticeship,
-        monthsOfCommercialExp: query.monthsOfCommercialExp,
+        expectedTypeWork: body.expectedTypeWork,
+        expectedContractType: body.expectedContractType,
+        expectedSalary: body.expectedSalary,
+        canTakeApprenticeship: body.canTakeApprenticeship,
+        monthsOfCommercialExp: body.monthsOfCommercialExp,
+        courseCompletion: body.expectedTypeWork,
+        courseEngagement: body.expectedTypeWork,
+        projectDegree: body.expectedTypeWork,
+        teamProjectDegree: body.expectedTypeWork,
       },
     });
+
+    console.log(students)
+
+    return students;
   }
 }
